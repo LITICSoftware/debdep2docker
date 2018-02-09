@@ -8,7 +8,7 @@ def query_deps(filename):
     """Query the Depend field of a .deb file"""
     cmd = ["dpkg-deb", "-f", filename, "Depends"]
     res = subprocess.run(cmd, stdout=subprocess.PIPE)
-    return res.stdout
+    return res.stdout.decode("utf-8")
 
 def parse_deps(deps_str):
     """Extract list of package names from raw field string"""
