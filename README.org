@@ -1,0 +1,10 @@
+=debdep2docker=
+
+A tool to create a =Dockerfile= for the dependencies of Debian packages, given
+as =.deb= files.
+
+This is useful if you build Debian packages for software that you develop, and
+which depends on some official Debian packages. You can build an image
+containing only your software (updated frequently) while depending on a (cached)
+image that contains all dependencies.
+
