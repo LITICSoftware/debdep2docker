@@ -2,6 +2,7 @@
 #
 # Generate a Dockerfile to provide the dependecies from .deb package files.
 
+import argparse
 import subprocess
 
 def query_deps(filename):
@@ -29,3 +30,16 @@ def merge_deps(depss):
     for lst in depss:
         uniq_pkgs.update(lst)
     return sorted(list(uniq_pkgs))
+
+
+def main(filenames):
+    pkgs = merge_deps([get_deps(f) for f in filenames])
+    print(pkgs)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("deb", nargs="+", help="Debian packages")
+    args = parser.parse_args()
+
+    main(args.deb)
