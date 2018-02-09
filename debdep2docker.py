@@ -6,7 +6,7 @@ import subprocess
 
 def query_deps(filename):
     """Query the Depend field of a .deb file"""
-    cmd = ["dpkg-query", "-f", filename, "Depend"]
+    cmd = ["dpkg-deb", "-f", filename, "Depends"]
     res = subprocess.run(cmd, stdout=subprocess.PIPE)
     return res.stdout
 
