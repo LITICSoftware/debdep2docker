@@ -31,11 +31,25 @@ def merge_deps(depss):
         uniq_pkgs.update(lst)
     return sorted(list(uniq_pkgs))
 
+# template
+DOCKERFILE = """
+# use Debian as base image
+FROM debian:stretch-slim
+
+# install packages
+RUN apt-get update
+RUN apt-get install -y {packages}
+"""
+
+def gen_dockerfile(pkgs):
+    """Generate Dockerfile that installs Debian packages"""
+    return DOCKERFILE.format(packages=" ".join(pkgs))
+
 
 def main(filenames):
     pkgs = merge_deps([get_deps(f) for f in filenames])
-    print(pkgs)
-
+    with open("Dockerfile", "w") as f:
+        f.write(gen_dockerfile(pkgs))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
