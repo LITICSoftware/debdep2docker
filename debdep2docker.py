@@ -34,26 +34,28 @@ def merge_deps(depss):
 # template
 DOCKERFILE = """
 # use Debian as base image
-FROM debian:stretch-slim
+FROM {base}
 
 # install packages
 RUN apt-get update
 RUN apt-get install -y {packages}
 """
 
-def gen_dockerfile(pkgs):
+def gen_dockerfile(pkgs, base_image):
     """Generate Dockerfile that installs Debian packages"""
-    return DOCKERFILE.format(packages=" ".join(pkgs))
+    return DOCKERFILE.format(packages=" ".join(pkgs), base=base_image)
 
 
-def main(filenames):
+def main(filenames, base_image):
     pkgs = merge_deps([get_deps(f) for f in filenames])
     with open("Dockerfile", "w") as f:
-        f.write(gen_dockerfile(pkgs))
+        f.write(gen_dockerfile(pkgs, base_image))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("deb", nargs="+", help="Debian packages")
+    parser.add_argument("--base_image", default="debian:stretch-slim",
+                        help="Docker base image")
     args = parser.parse_args()
 
-    main(args.deb)
+    main(args.deb, args.base_image)
