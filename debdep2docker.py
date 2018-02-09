@@ -22,3 +22,10 @@ def parse_deps(deps_str):
 def get_deps(filename):
     """List of packages from .deb files."""
     return parse_deps(query_deps(filename))
+
+def merge_deps(depss):
+    """Unique packages from list of lists"""
+    uniq_pkgs = set()
+    for lst in depss:
+        uniq_pkgs.update(lst)
+    return sorted(list(uniq_pkgs))

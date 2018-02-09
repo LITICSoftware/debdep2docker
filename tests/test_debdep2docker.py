@@ -1,6 +1,6 @@
 import pytest
 
-from debdep2docker import parse_deps
+from debdep2docker import parse_deps, merge_deps
 
 def test_parse_deps():
     # empty dependencies
@@ -20,3 +20,13 @@ def test_parse_deps():
 
     # don't choke on alternatives
     assert parse_deps("foo | bar, baz") == ["foo", "baz"]
+
+def test_merge_deps():
+    # empty
+    assert merge_deps([]) == []
+
+    # singleton (sorted)
+    assert merge_deps([["foo", "bar"]]) == ["bar", "foo"]
+
+    # multiple
+    assert merge_deps([["foo", "bar"], ["bar", "baz"]]) == ["bar", "baz", "foo"]
